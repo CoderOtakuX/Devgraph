@@ -22,7 +22,7 @@ function toProjectCategory(category?: string): ProjectCategory {
 }
 
 export async function rememberMemory(content: string, dataset: string): Promise<void> {
-  const response = await fetch(`${COGNEE_API_URL}/api/v1/memory/remember`, {
+  const response = await fetch(`${COGNEE_API_URL}/api/v1/remember`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -44,7 +44,7 @@ export async function recallMemory(query: string, dataset?: string): Promise<Mem
     body.dataset_name = dataset
   }
 
-  const response = await fetch(`${COGNEE_API_URL}/api/v1/memory/recall`, {
+  const response = await fetch(`${COGNEE_API_URL}/api/v1/recall`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -70,7 +70,7 @@ export async function recallMemory(query: string, dataset?: string): Promise<Mem
 }
 
 export async function forgetMemory(dataset: string): Promise<void> {
-  const response = await fetch(`${COGNEE_API_URL}/api/v1/memory/forget`, {
+  const response = await fetch(`${COGNEE_API_URL}/api/v1/forget`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -87,7 +87,7 @@ export async function forgetMemory(dataset: string): Promise<void> {
 
 export async function improveMemory(): Promise<void> {
   try {
-    const response = await fetch(`${COGNEE_API_URL}/api/v1/memory/improve`, {
+    const response = await fetch(`${COGNEE_API_URL}/api/v1/improve`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
