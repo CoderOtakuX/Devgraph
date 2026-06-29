@@ -2,6 +2,7 @@
 
 import React from 'react'
 import Sidebar from '@/components/Sidebar'
+import MemoryInput from '@/components/MemoryInput'
 import { useProject } from '@/lib/projectContext'
 
 export default function Home() {
@@ -34,7 +35,7 @@ export default function Home() {
         <div className="flex-1 overflow-y-auto">
           {/* Memory Input Section */}
           <div id="memory-input-section" className="min-h-[200px] border-b border-[#1f1f1f] p-6">
-            <p className="text-zinc-400 text-sm">MemoryInput goes here</p>
+            <MemoryInput />
           </div>
 
           {/* Recall Section */}
