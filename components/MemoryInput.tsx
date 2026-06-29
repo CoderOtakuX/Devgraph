@@ -67,99 +67,99 @@ export default function MemoryInput() {
   const categories: ProjectCategory[] = ['Architecture', 'Bug Fix', 'Pattern', 'Decision', 'Note']
 
   return (
-    <div className="flex flex-col gap-8 w-full max-w-[1000px] mx-auto">
-      {/* Section 1: Header */}
-      <header className="flex justify-between items-start w-full border-b border-[#262626] pb-6">
+    <div className="px-8 py-8 max-w-4xl flex flex-col mx-auto">
+      {/* Header */}
+      <header className="flex justify-between items-start w-full border-b border-white/8 pb-6 mb-6">
         <div>
-          <h2 className="text-3xl font-semibold text-white mb-2 tracking-tight">Log Memory</h2>
-          <p className="text-base text-zinc-400">Capture decisions, patterns, and bugs across your projects</p>
+          <h2 className="text-3xl font-bold text-white mb-1">Log Memory</h2>
+          <p className="text-gray-400 text-sm mb-6">Capture decisions, patterns, and bugs across your projects</p>
         </div>
-        <div className="bg-[#ddb7ff]/20 text-[#ddb7ff] border border-[#ddb7ff]/30 px-3 py-1 rounded-full flex items-center gap-2 text-[11px] font-medium">
-          <span className={`w-2 h-2 rounded-full ${activeProject ? 'bg-[#ddb7ff] animate-pulse' : 'bg-zinc-500'}`}></span>
+        <div className="inline-flex items-center gap-1.5 bg-purple-900/40 text-purple-300 border border-purple-700/40 rounded-full px-3 py-1 text-xs">
+          <span className={`w-2 h-2 rounded-full ${activeProject ? 'bg-purple-400 animate-pulse' : 'bg-zinc-500'}`}></span>
           {activeProject ? activeProject.name : 'No project selected'}
         </div>
       </header>
 
-      {/* Memory Input Panel */}
-      <div className="bg-[#141414] border border-[#262626] rounded-xl p-6 flex flex-col gap-6">
-        {/* Section 2: Textarea */}
-        <div className="relative w-full">
-          <textarea
-            value={content}
-            onChange={(e) => setContent(e.target.value)}
-            disabled={!activeProject}
-            className="w-full bg-[#0a0a0a] border border-[#262626] rounded-lg p-4 text-base text-white placeholder:text-zinc-500 focus:border-[#ddb7ff] focus:ring-0 focus:outline-none transition-colors resize-none min-h-[160px] disabled:opacity-50 disabled:cursor-not-allowed"
-            placeholder={
-              activeProject
-                ? "e.g. Decided to use BullMQ over raw Redis pub/sub because we need job retries and dead letter queues..."
-                : "Please select a project from the sidebar to start logging memories..."
-            }
-          />
+      {/* Memory Input Panel / Form Card */}
+      <div className="bg-[#161b22] border border-white/10 rounded-xl p-5 flex flex-col gap-4 focus-within:border-purple-500/60 focus-within:ring-1 focus-within:ring-purple-500/20">
+        {/* Textarea */}
+        <textarea
+          value={content}
+          onChange={(e) => setContent(e.target.value)}
+          disabled={!activeProject}
+          className="w-full bg-transparent border-none outline-none text-white text-sm placeholder-gray-600 resize-y min-h-[96px] leading-relaxed disabled:opacity-50 disabled:cursor-not-allowed"
+          placeholder={
+            activeProject
+              ? "e.g. Decided to use BullMQ over raw Redis pub/sub because we need job retries and dead letter queues..."
+              : "Please select a project from the sidebar to start logging memories..."
+          }
+        />
+
+        {/* Classification */}
+        <div className="flex flex-col">
+          <span className="text-[10px] font-semibold tracking-widest text-gray-500 uppercase mt-4 mb-3">Classification</span>
+          <div className="flex flex-wrap gap-2">
+            {categories.map((cat) => {
+              const isSelected = category === cat
+              return (
+                <button
+                  key={cat}
+                  type="button"
+                  onClick={() => setCategory(cat)}
+                  disabled={!activeProject}
+                  className={
+                    isSelected
+                      ? 'px-3 py-1 rounded-full text-xs font-medium cursor-pointer border border-purple-600 bg-purple-600 text-white'
+                      : 'px-3 py-1 rounded-full text-xs font-medium cursor-pointer border border-white/10 bg-white/5 text-gray-400 hover:border-purple-500/40 hover:text-gray-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed'
+                  }
+                >
+                  {cat}
+                </button>
+              )
+            })}
+          </div>
         </div>
 
-        {/* Section 3: Categories & Actions */}
-        <div className="flex flex-wrap justify-between items-end gap-4">
-          <div className="flex flex-col gap-3">
-            <span className="text-[11px] font-semibold tracking-wider text-zinc-500 uppercase">Classification</span>
-            <div className="flex flex-wrap gap-2">
-              {categories.map((cat) => {
-                const isSelected = category === cat
-                return (
-                  <button
-                    key={cat}
-                    type="button"
-                    onClick={() => setCategory(cat)}
-                    disabled={!activeProject}
-                    className={`text-[13px] font-medium px-4 py-2 rounded border transition-colors disabled:opacity-50 disabled:cursor-not-allowed ${
-                      isSelected
-                        ? 'border-[#ddb7ff] bg-[#ddb7ff]/10 text-[#ddb7ff]'
-                        : 'border-[#262626] bg-transparent text-zinc-400 hover:border-[#ddb7ff] hover:text-white'
-                    }`}
-                  >
-                    {cat}
-                  </button>
-                )
-              })}
-            </div>
-          </div>
-
-          <div className="flex flex-col items-end gap-2">
-            <div className="flex items-center gap-4">
-              <span className="text-[11px] text-zinc-500 font-mono">{content.length} / 1000</span>
-              <button
-                onClick={handleSubmit}
-                disabled={!content.trim() || !activeProject || isSubmitting}
-                className="bg-[#ddb7ff] text-black font-semibold text-[13px] px-6 py-2 rounded flex items-center gap-2 hover:bg-[#ddb7ff]/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                {isSubmitting ? (
-                  <>
-                    <span className="animate-spin border-2 rounded-full w-3 h-3 border-black/30 border-t-black inline-block mr-1"></span>
-                    Saving...
-                  </>
-                ) : (
-                  <>
-                    <span className="material-symbols-outlined text-[18px]">bookmark</span>
-                    Save Memory
-                  </>
-                )}
-              </button>
-            </div>
-            {error && <p className="text-red-400 text-xs mt-2">{error}</p>}
+        {/* Bottom Action Row */}
+        <div className="flex items-center justify-between mt-4 pt-4 border-t border-white/8">
+          <span className="text-xs text-gray-600 font-mono">{content.length} / 1000</span>
+          
+          <div className="flex flex-col items-end">
+            <button
+              onClick={handleSubmit}
+              disabled={!content.trim() || !activeProject || isSubmitting}
+              className={
+                (!content.trim() || !activeProject || isSubmitting)
+                  ? 'flex items-center gap-2 bg-purple-600/50 text-white/50 text-sm font-medium px-4 py-2 rounded-lg cursor-not-allowed'
+                  : 'flex items-center gap-2 bg-purple-600 hover:bg-purple-500 text-white text-sm font-medium px-4 py-2 rounded-lg transition-colors'
+              }
+            >
+              {isSubmitting ? (
+                <>
+                  <span className="animate-spin border-2 rounded-full w-3.5 h-3.5 border-white/30 border-t-white inline-block"></span>
+                  Saving...
+                </>
+              ) : (
+                <>
+                  <span className="material-symbols-outlined text-[18px]">bookmark</span>
+                  Save Memory
+                </>
+              )}
+            </button>
           </div>
         </div>
       </div>
+      {error && <p className="text-red-400 text-xs mt-2 text-right">{error}</p>}
 
-      {/* Section 5: Recent Memories */}
-      <div className="mt-4 flex flex-col gap-4">
-        <div className="flex items-center gap-2 border-b border-[#262626] pb-2 mb-2">
-          <span className="material-symbols-outlined text-zinc-400 text-[18px]">history</span>
-          <h3 className="text-[13px] font-semibold text-zinc-400 uppercase tracking-wider">
-            Recent ({recentMemories.length})
-          </h3>
+      {/* Recent Memories Section */}
+      <div className="flex flex-col">
+        <div className="text-[10px] font-semibold tracking-widest text-gray-500 uppercase flex items-center gap-2 mt-8 mb-4 px-1 border-b border-white/8 pb-2">
+          <span className="material-symbols-outlined text-[16px]">history</span>
+          <span>Recent ({recentMemories.length})</span>
         </div>
 
         {recentMemories.length === 0 ? (
-          <p className="text-gray-600 text-sm text-center py-6">
+          <p className="text-gray-600 text-sm text-center py-8">
             No memories logged yet. Start by saving your first decision above.
           </p>
         ) : (
@@ -167,19 +167,21 @@ export default function MemoryInput() {
             {recentMemories.map((memory) => (
               <div
                 key={memory.id}
-                className="bg-[#1a1a1a] border border-[#262626] rounded-lg p-5 hover:bg-[#1c1c1c] transition-colors relative overflow-hidden group cursor-pointer"
+                className="bg-[#161b22] border border-white/8 rounded-xl p-4 mb-3"
               >
-                <div className="absolute left-0 top-0 bottom-0 w-[2px] bg-transparent group-hover:bg-[#ddb7ff] transition-colors"></div>
                 <div className="flex justify-between items-start mb-3">
                   <div className="flex items-center gap-3">
-                    <span className="bg-white/5 border border-white/10 text-zinc-400 text-[11px] px-2 py-1 rounded">
+                    <span className="px-2 py-0.5 rounded-full text-[10px] font-medium border border-purple-600 bg-purple-600 text-white">
                       {memory.category}
                     </span>
-                    <span className="text-[11px] text-zinc-500">{timeAgo(memory.createdAt)}</span>
+                    <span className="text-xs text-gray-600">{timeAgo(memory.createdAt)}</span>
                   </div>
-                  <span className="text-[11px] text-[#ddb7ff]/70">{memory.project}</span>
+                  <span className="text-xs text-gray-600 mt-3 flex items-center gap-1">
+                    <span className="w-1.5 h-1.5 rounded-full bg-purple-400"></span>
+                    {memory.project}
+                  </span>
                 </div>
-                <p className="text-[14px] text-zinc-300 leading-relaxed whitespace-pre-wrap">
+                <p className="text-sm text-gray-300 mt-2 leading-relaxed line-clamp-2 whitespace-pre-wrap">
                   {memory.content}
                 </p>
               </div>
